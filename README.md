@@ -1,4 +1,4 @@
-# An OOP school library app: Add Person, Student and Teacher classes 🧑‍🏫
+# An OOP school library app: Decorator pattern in OOP 🎁
 
 > Adopting an Object-oriented programming model to build a simple school library application
 
