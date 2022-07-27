@@ -1,9 +1,10 @@
-require "./nameable"
+require './nameable'
 
 class Decorator < Nameable
   attr_accessor :component
 
   def initialize(component)
+    super()
     @component = component
   end
 
