@@ -1,4 +1,4 @@
-# An OOP school library app: Decorator pattern in OOP 🎁
+# An OOP school library app: Set up associations 🏹
 
 > Adopting an Object-oriented programming model to build a simple school library application
 
