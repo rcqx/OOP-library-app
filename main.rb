@@ -23,6 +23,8 @@ def options(input, app)
     app.add_book
   when "5"
     app.create_rental
+  when "6"
+    app.list_rentals
   when "7"
     puts "See you soon bud!"
   end

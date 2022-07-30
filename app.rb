@@ -95,6 +95,16 @@ class App
     puts "Rental created successfully!\n\n"
   end
 
+  # list rental
+  def list_rentals
+    print 'Enter ID: '
+    person_id = gets.chomp
+    rentals = ObjectSpace.each_object(Rental).select { |rental| rental.person.id.to_i == person_id.to_i }
+    rentals.each { |rental| print "Date: #{rental.date}, Book: #{rental.book.title} Person: #{rental.person.name}\n" }
+    puts "There are not rentals" if rentals == []
+    puts "\n"
+  end
+
   def books_for_rental
     puts "Please select a book from the rental list:"
     ObjectSpace.each_object(Book).with_index do |book, index|
@@ -117,9 +127,9 @@ class App
     puts "Please select person from list number"
     ObjectSpace.each_object(Person).with_index do |person, index|
       if person.instance_of?(Teacher)
-        print "List Number: #{index} [Teacher] Name: #{person.name}, Age: #{person.age}\n"
+        print "List Number: #{index} [Teacher] ID: #{person.id} Name: #{person.name}, Age: #{person.age}\n"
       elsif person.instance_of?(Student)
-        print "List Number: #{index} [Student] Name: #{person.name}, Age: #{person.age}\n"
+        print "List Number: #{index} [Student] ID: #{person.id} Name: #{person.name}, Age: #{person.age}\n"
       end
     end
     puts "\n"
