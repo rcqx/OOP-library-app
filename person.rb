@@ -21,7 +21,7 @@ class Person < Nameable
     name
   end
 
-  def add_ren￼tal(rental)
+  def add_rental(rental)
     @rentals.push(rental.book)
     rental.book.rentals << rental.person
   end

@@ -13,10 +13,16 @@ end
 
 def options(input, app)
   case input
+  when "1"
+    app.list_books
+  when "2"
+    app.list_people
+  when "3"
+    app.add_person
   when "4"
     app.add_book
   when "7"
-    puts "See you soon!"
+    puts "See you soon bud!"
   end
 end  
 
