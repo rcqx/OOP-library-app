@@ -38,6 +38,7 @@ class App
         puts "[Visitor] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
       end
     end
+    puts "\n"
   end
 
   # rubocop:disable Metrics/MethodLength
