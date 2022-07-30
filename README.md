@@ -1,4 +1,4 @@
-# An OOP school library app: Set up associations 🏹
+# An OOP school library app: Add Basic UI 🤖
 
 > Adopting an Object-oriented programming model to build a simple school library application
 
