@@ -1,3 +1,4 @@
+require 'pry'
 require './book'
 require './person'
 require './student'
@@ -5,11 +6,11 @@ require './teacher'
 require './rental'
 
 class App
-  def greeter
+  def self.greeter
     print "Welcome to School Library App!\n\n"
   end
 
-  def instructions
+  def self.instructions
     puts "Please choose an option by entering a number:
     1 - List all books
     2 - List all people
@@ -21,18 +22,18 @@ class App
   end
 
   # option 1: List books
-  def list_books
+  def self.list_books
     ObjectSpace.each_object(Book) { |book| puts "Title: \"#{book.title}\", Author: #{book.author}" }
     puts 'Bookshelf is currently empty!' if ObjectSpace.each_object(Book).count.zero? == true
     puts "\n"
   end
 
   # option 2: List people
-  def list_people
+  def self.list_people
     ObjectSpace.each_object(Person) do |person|
       if person.instance_of?(Teacher)
         puts "[Teacher] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
-      elsif person.instance_of?(Student)
+      elsif person.instace_of?(Student)
         puts "[Student] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
       else
         puts "[Visitor] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
@@ -42,7 +43,7 @@ class App
   end
 
   # rubocop:disable Metrics/MethodLength
-  def add_person
+  def self.add_person
     puts 'Do you want to create a Student (1) or a Teacher (2)? [Input number]: '
     input = gets.chomp
     case input
@@ -71,7 +72,7 @@ class App
   # rubocop:enable Metrics/MethodLength
 
   # create book
-  def add_book
+  def self.add_book
     print 'Enter book title: '
     title = gets.chomp
     print 'Enter book author: '
@@ -81,7 +82,7 @@ class App
   end
 
   # create rental
-  def create_rental
+  def self.create_rental
     if ObjectSpace.each_object(Book).count.zero?
       puts "There are no books stored in the system\n\n"
       return nil
@@ -107,7 +108,7 @@ class App
   end
 
   # list rental by id
-  def list_rentals
+  def self.list_rentals
     print 'Enter ID: '
     person_id = gets.chomp
     rentals = ObjectSpace.each_object(Rental).select { |rental| rental.person.id.to_i == person_id.to_i }
@@ -118,7 +119,7 @@ class App
     puts "\n"
   end
 
-  def books_for_rental
+  def self.books_for_rental
     puts 'Please select a book using the rental list number:'
     ObjectSpace.each_object(Book).with_index do |book, index|
       print "List Number --> #{index} Title: #{book.title}, Author: #{book.author}\n"
@@ -126,7 +127,7 @@ class App
     puts "\n"
   end
 
-  def select_book
+  def self.select_book
     book_number = gets.chomp.to_i
     book_obj = ObjectSpace.each_object(Book).with_index.find { |_book, index| index == book_number }
     if book_obj.nil?
@@ -136,7 +137,7 @@ class App
     book_obj[0]
   end
 
-  def persons_rental
+  def self.persons_rental
     puts 'Please select person using the list number'
     ObjectSpace.each_object(Person).with_index do |person, index|
       if person.instance_of?(Teacher)
@@ -148,7 +149,7 @@ class App
     puts "\n"
   end
 
-  def select_person
+  def self.select_person
     person_number = gets.chomp.to_i
     person_obj = ObjectSpace.each_object(Person).with_index.find { |_person, index| index == person_number }
     if person_obj.nil?
