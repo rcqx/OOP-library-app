@@ -2,6 +2,7 @@ require "./book"
 require "./person"
 require "./student"
 require "./teacher"
+require "./rental"
 
 class App
   def greeter
@@ -68,7 +69,7 @@ class App
     end
   end
 
-  # option 4
+  # create book
   def add_book 
     print "Enter book title: "
     title = gets.chomp
@@ -77,4 +78,61 @@ class App
     book = Book.new(title, author)
     puts "Book was created successfully!\n\n"
   end
+
+  # create rental
+  def create_rental
+    books_for_rental
+    book_obj = select_book 
+    return nil if book_obj.nil?
+    
+    persons_rental
+    person_obj = select_person
+    return nil if book_obj.nil?
+    
+    print "Date: "
+    date = gets.chomp
+    Rental.new(date, book_obj, person_obj)
+    puts "Rental created successfully!\n\n"
+  end
+
+  def books_for_rental
+    puts "Please select a book from the rental list:"
+    ObjectSpace.each_object(Book).with_index do |book, index|
+      print "#{index} Title: #{book.title}, Author: #{book.author}\n"
+    end
+    puts "\n"
+  end
+
+  def select_book
+    book_number = gets.chomp.to_i
+    book_obj = ObjectSpace.each_object(Book).with_index.find { |book, index| index == book_number }
+    if book_obj.nil?
+      puts "No registered book \n\n"
+      return nil
+    end
+    book_obj[0]
+  end
+
+  def persons_rental
+    puts "Please select person from list number"
+    ObjectSpace.each_object(Person).with_index do |person, index|
+      if person.instance_of?(Teacher)
+        print "List Number: #{index} [Teacher] Name: #{person.name}, Age: #{person.age}\n"
+      elsif person.instance_of?(Student)
+        print "List Number: #{index} [Student] Name: #{person.name}, Age: #{person.age}\n"
+      end
+    end
+    puts "\n"
+  end
+  
+  def select_person
+    person_number = gets.chomp.to_i
+    person_obj = ObjectSpace.each_object(Person).with_index.find { |person, index| index == person_number }
+    if person_obj.nil?
+      puts "No registered person \n\n"
+      return nil
+    end
+    person_obj[0]
+  end
+
 end

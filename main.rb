@@ -21,6 +21,8 @@ def options(input, app)
     app.add_person
   when "4"
     app.add_book
+  when "5"
+    app.create_rental
   when "7"
     puts "See you soon bud!"
   end
