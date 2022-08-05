@@ -1,10 +1,16 @@
-require './book'
-require './person'
-require './student'
-require './teacher'
-require './rental'
+require_relative 'book'
+require_relative 'person'
+require_relative 'student'
+require_relative 'teacher'
+require_relative 'rental'
 
 class App
+  attr_accessor :books
+
+  def initialize
+    @books = []
+  end
+
   def greeter
     print "Welcome to School Library App!\n\n"
   end
@@ -29,13 +35,15 @@ class App
 
   # option 2: List people
   def list_people
+    if ObjectSpace.each_object(Person).count.zero?
+      puts 'No registered users!'
+    end
+
     ObjectSpace.each_object(Person) do |person|
       if person.instance_of?(Teacher)
         puts "[Teacher] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
-      elsif person.instance_of?(Student)
+      else person.instance_of?(Student)
         puts "[Student] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
-      else
-        puts "[Visitor] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
       end
     end
     puts "\n"
@@ -76,7 +84,7 @@ class App
     title = gets.chomp
     print 'Enter book author: '
     author = gets.chomp
-    Book.new(title, author)
+    @books << Book.new(title, author)
     puts "Book was created successfully!\n\n"
   end
 
