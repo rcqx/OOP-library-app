@@ -9,6 +9,7 @@ class App
 
   def initialize
     @books = []
+    @persons = []
   end
 
   def greeter
