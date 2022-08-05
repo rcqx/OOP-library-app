@@ -10,6 +10,7 @@ class App
   def initialize
     @books = []
     @persons = []
+    @rentals = []
   end
 
   def greeter
@@ -90,12 +91,12 @@ class App
 
   # create rental
   def create_rental
-    if ObjectSpace.each_object(Book).count.zero?
+    if @books.count.zero?
       puts "There are no books stored in the system\n\n"
       return nil
     end
 
-    if ObjectSpace.each_object(Person).count.zero?
+    if @persons.count.zero?
       puts "There are no persons stored in the system\n\n"
       return nil
     end
@@ -110,7 +111,7 @@ class App
 
     print 'Date: '
     date = gets.chomp
-    Rental.new(date, book_obj, person_obj)
+    @rentals << Rental.new(date, book_obj, person_obj)
     puts "Rental created successfully!\n\n"
   end
 
@@ -128,7 +129,7 @@ class App
 
   def books_for_rental
     puts 'Please select a book using the rental list number:'
-    ObjectSpace.each_object(Book).with_index do |book, index|
+    @books.each_with_index do |book, index| 
       print "List Number --> #{index} Title: #{book.title}, Author: #{book.author}\n"
     end
     puts "\n"
@@ -136,17 +137,17 @@ class App
 
   def select_book
     book_number = gets.chomp.to_i
-    book_obj = ObjectSpace.each_object(Book).with_index.find { |_book, index| index == book_number }
+    book_obj = @books.each_with_index.find { |book, index| index == book_number }
     if book_obj.nil?
       puts "No registered book \n\n"
       return nil
     end
-    book_obj[0]
+    book_obj
   end
 
   def persons_rental
     puts 'Please select person using the list number'
-    ObjectSpace.each_object(Person).with_index do |person, index|
+    @persons.each_with_index do |person, index|
       if person.instance_of?(Teacher)
         print "List Number --> #{index} [Teacher] ID: #{person.id} Name: #{person.name}, Age: #{person.age}\n"
       elsif person.instance_of?(Student)
@@ -158,11 +159,11 @@ class App
 
   def select_person
     person_number = gets.chomp.to_i
-    person_obj = ObjectSpace.each_object(Person).with_index.find { |_person, index| index == person_number }
+    person_obj = @persons.each_with_index.find { |person, index| index == person_number }
     if person_obj.nil?
       puts "No registered person \n\n"
       return nil
     end
-    person_obj[0]
+    person_obj
   end
 end
