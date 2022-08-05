@@ -2,7 +2,6 @@ require_relative '../lib/person'
 
 describe Person do
   context 'Correct persons object instantiation along with methods' do
-    
     let(:person) { Person.new('Craig', 37) }
 
     it 'can add, store and access person name correctly' do

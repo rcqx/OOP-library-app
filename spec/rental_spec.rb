@@ -3,11 +3,11 @@ require_relative '../lib/book'
 require_relative '../lib/person'
 
 describe Rental do
-  context "Correct rental object instantiation and retrieval of obj instance vars" do 
+  context 'Correct rental object instantiation and retrieval of obj instance vars' do
     let(:book) { Book.new('LOTR', 'Tolkien') }
     let(:person) { Person.new('Jose', 33) }
-    let(:rental) { Rental.new('2022-08-05', book, person ) }
-    
+    let(:rental) { Rental.new('2022-08-05', book, person) }
+
     it 'received and accepts book and person objects as inputs' do
       expect(rental.book).to be_a Book
       expect(rental.person).to be_a Person

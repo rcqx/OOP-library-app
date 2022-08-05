@@ -40,11 +40,12 @@ class App
   # option 2: List people
   def list_people
     @persons.each do |person|
-      if person.instance_of?(Teacher)
+      unless person.instance_of?(Teacher)
         puts "[#{person.class}] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
-      else person.instance_of?(Student)
+      end
+      unless person.instance_of?(Student)
         puts "[#{person.class}] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
-      end      
+      end
     end
     puts 'No registered users!' if @persons.count.zero?
     puts "\n"
@@ -119,19 +120,20 @@ class App
   def list_rentals
     print 'Enter ID: '
     person_id = gets.chomp
-    rentals = @rentals.select { |rental| rental.person[0].id.to_i == person_id.to_i }    
+    rentals = @rentals.select { |rental| rental.person[0].id.to_i == person_id.to_i }
     rentals.each do |rental|
-      print "Date: #{rental.date}, #{rental.book[0].title} by #{rental.book[0].author} Person: #{rental.person[0].name}\n"
+      print "Date: #{rental.date}, #{rental.book[0].title} by #{rental.book[0].author} Person: #{rental.person[0].name}"
+      puts "\n"
     end
     puts 'There are not rentals registered under that ID number :(' if rentals == []
     puts "\n"
   end
 
-  private 
+  private
 
   def books_for_rental
     puts 'Please select a book using the rental list number:'
-    @books.each_with_index do |book, index| 
+    @books.each_with_index do |book, index|
       print "List Number --> #{index} Title: #{book.title}, Author: #{book.author}\n"
     end
     puts "\n"
@@ -139,7 +141,7 @@ class App
 
   def select_book
     book_number = gets.chomp.to_i
-    book_obj = @books.each_with_index.find { |book, index| index == book_number }
+    book_obj = @books.each_with_index.find { |_book, index| index == book_number }
     if book_obj.nil?
       puts "No registered book \n\n"
       return nil
@@ -161,7 +163,7 @@ class App
 
   def select_person
     person_number = gets.chomp.to_i
-    person_obj = @persons.each_with_index.find { |person, index| index == person_number }
+    person_obj = @persons.each_with_index.find { |_person, index| index == person_number }
     if person_obj.nil?
       puts "No registered person \n\n"
       return nil
