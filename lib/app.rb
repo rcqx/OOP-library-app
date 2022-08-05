@@ -64,7 +64,7 @@ class App
       permit = gets.chomp.upcase
       permit_arg = true if permit == 'Y'
       permit_arg = false if permit == 'N'
-      Student.new(name, age, parent_permission: permit_arg)
+      @persons << Student.new(name, age, parent_permission: permit_arg)
       puts "Person created succesfully!\n\n"
     when '2'
       print 'Age: '
@@ -73,8 +73,9 @@ class App
       name = gets.chomp
       print 'Specialization: '
       specialization = gets.chomp
-      Teacher.new(name, age, specialization)
+      @persons << Teacher.new(name, age, specialization)
       puts "Person created succesfully!\n\n"
+      p @persons
     end
   end
   # rubocop:enable Metrics/MethodLength
