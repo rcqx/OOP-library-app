@@ -119,13 +119,15 @@ class App
   def list_rentals
     print 'Enter ID: '
     person_id = gets.chomp
-    rentals = ObjectSpace.each_object(Rental).select { |rental| rental.person.id.to_i == person_id.to_i }
+    rentals = @rentals.select { |rental| rental.person[0].id.to_i == person_id.to_i }    
     rentals.each do |rental|
-      print "Date: #{rental.date}, #{rental.book.title} by #{rental.book.author} Person: #{rental.person.name}\n"
+      print "Date: #{rental.date}, #{rental.book[0].title} by #{rental.book[0].author} Person: #{rental.person[0].name}\n"
     end
-    puts 'There are not rentals' if rentals == []
+    puts 'There are not rentals registered under that ID number :(' if rentals == []
     puts "\n"
   end
+
+  private 
 
   def books_for_rental
     puts 'Please select a book using the rental list number:'
