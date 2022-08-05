@@ -1,4 +1,4 @@
-require './app'
+require './lib/app'
 
 def main
   app = App.new
@@ -9,6 +9,7 @@ def main
     input = gets.chomp
     options(input, app)
   end
+  puts 'Thanks for using our Library App!'
 end
 
 def options(input, app)

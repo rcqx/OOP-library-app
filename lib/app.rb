@@ -1,10 +1,18 @@
-require './book'
-require './person'
-require './student'
-require './teacher'
-require './rental'
+require_relative 'book'
+require_relative 'person'
+require_relative 'student'
+require_relative 'teacher'
+require_relative 'rental'
 
 class App
+  attr_accessor :books
+
+  def initialize
+    @books = []
+    @persons = []
+    @rentals = []
+  end
+
   def greeter
     print "Welcome to School Library App!\n\n"
   end
@@ -22,22 +30,24 @@ class App
 
   # option 1: List books
   def list_books
-    ObjectSpace.each_object(Book) { |book| puts "Title: \"#{book.title}\", Author: #{book.author}" }
-    puts 'Bookshelf is currently empty!' if ObjectSpace.each_object(Book).count.zero? == true
+    @books.each do |book|
+      puts "[#{book.class}] Title: #{book.title}, Author: #{book.author}"
+    end
+    puts 'Bookshelf is currently empty!' if @books.count.zero?
     puts "\n"
   end
 
   # option 2: List people
   def list_people
-    ObjectSpace.each_object(Person) do |person|
-      if person.instance_of?(Teacher)
-        puts "[Teacher] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
-      elsif person.instance_of?(Student)
-        puts "[Student] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
-      else
-        puts "[Visitor] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
+    @persons.each do |person|
+      unless person.instance_of?(Teacher)
+        puts "[#{person.class}] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
+      end
+      unless person.instance_of?(Student)
+        puts "[#{person.class}] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
       end
     end
+    puts 'No registered users!' if @persons.count.zero?
     puts "\n"
   end
 
@@ -55,7 +65,7 @@ class App
       permit = gets.chomp.upcase
       permit_arg = true if permit == 'Y'
       permit_arg = false if permit == 'N'
-      Student.new(name, age, parent_permission: permit_arg)
+      @persons << Student.new(name, age, parent_permission: permit_arg)
       puts "Person created succesfully!\n\n"
     when '2'
       print 'Age: '
@@ -64,7 +74,7 @@ class App
       name = gets.chomp
       print 'Specialization: '
       specialization = gets.chomp
-      Teacher.new(name, age, specialization)
+      @persons << Teacher.new(name, age, specialization)
       puts "Person created succesfully!\n\n"
     end
   end
@@ -76,18 +86,18 @@ class App
     title = gets.chomp
     print 'Enter book author: '
     author = gets.chomp
-    Book.new(title, author)
+    @books << Book.new(title, author)
     puts "Book was created successfully!\n\n"
   end
 
   # create rental
   def create_rental
-    if ObjectSpace.each_object(Book).count.zero?
+    if @books.count.zero?
       puts "There are no books stored in the system\n\n"
       return nil
     end
 
-    if ObjectSpace.each_object(Person).count.zero?
+    if @persons.count.zero?
       puts "There are no persons stored in the system\n\n"
       return nil
     end
@@ -102,7 +112,7 @@ class App
 
     print 'Date: '
     date = gets.chomp
-    Rental.new(date, book_obj, person_obj)
+    @rentals << Rental.new(date, book_obj, person_obj)
     puts "Rental created successfully!\n\n"
   end
 
@@ -110,17 +120,20 @@ class App
   def list_rentals
     print 'Enter ID: '
     person_id = gets.chomp
-    rentals = ObjectSpace.each_object(Rental).select { |rental| rental.person.id.to_i == person_id.to_i }
+    rentals = @rentals.select { |rental| rental.person[0].id.to_i == person_id.to_i }
     rentals.each do |rental|
-      print "Date: #{rental.date}, #{rental.book.title} by #{rental.book.author} Person: #{rental.person.name}\n"
+      print "Date: #{rental.date}, #{rental.book[0].title} by #{rental.book[0].author} Person: #{rental.person[0].name}"
+      puts "\n"
     end
-    puts 'There are not rentals' if rentals == []
+    puts 'There are not rentals registered under that ID number :(' if rentals == []
     puts "\n"
   end
 
+  private
+
   def books_for_rental
     puts 'Please select a book using the rental list number:'
-    ObjectSpace.each_object(Book).with_index do |book, index|
+    @books.each_with_index do |book, index|
       print "List Number --> #{index} Title: #{book.title}, Author: #{book.author}\n"
     end
     puts "\n"
@@ -128,17 +141,17 @@ class App
 
   def select_book
     book_number = gets.chomp.to_i
-    book_obj = ObjectSpace.each_object(Book).with_index.find { |_book, index| index == book_number }
+    book_obj = @books.each_with_index.find { |_book, index| index == book_number }
     if book_obj.nil?
       puts "No registered book \n\n"
       return nil
     end
-    book_obj[0]
+    book_obj
   end
 
   def persons_rental
     puts 'Please select person using the list number'
-    ObjectSpace.each_object(Person).with_index do |person, index|
+    @persons.each_with_index do |person, index|
       if person.instance_of?(Teacher)
         print "List Number --> #{index} [Teacher] ID: #{person.id} Name: #{person.name}, Age: #{person.age}\n"
       elsif person.instance_of?(Student)
@@ -150,11 +163,11 @@ class App
 
   def select_person
     person_number = gets.chomp.to_i
-    person_obj = ObjectSpace.each_object(Person).with_index.find { |_person, index| index == person_number }
+    person_obj = @persons.each_with_index.find { |_person, index| index == person_number }
     if person_obj.nil?
       puts "No registered person \n\n"
       return nil
     end
-    person_obj[0]
+    person_obj
   end
 end
