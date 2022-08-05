@@ -29,24 +29,23 @@ class App
 
   # option 1: List books
   def list_books
-    ObjectSpace.each_object(Book) { |book| puts "Title: \"#{book.title}\", Author: #{book.author}" }
-    puts 'Bookshelf is currently empty!' if ObjectSpace.each_object(Book).count.zero? == true
+    @books.each do |book|
+      puts "[#{book.class}] Title: #{book.title}, Author: #{book.author}"
+    end
+    puts 'Bookshelf is currently empty!' if @books.count.zero?
     puts "\n"
   end
 
   # option 2: List people
   def list_people
-    if ObjectSpace.each_object(Person).count.zero?
-      puts 'No registered users!'
-    end
-
-    ObjectSpace.each_object(Person) do |person|
+    @persons.each do |person|
       if person.instance_of?(Teacher)
-        puts "[Teacher] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
+        puts "[#{person.class}] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
       else person.instance_of?(Student)
-        puts "[Student] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
-      end
+        puts "[#{person.class}] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
+      end      
     end
+    puts 'No registered users!' if @persons.count.zero?
     puts "\n"
   end
 
@@ -75,7 +74,6 @@ class App
       specialization = gets.chomp
       @persons << Teacher.new(name, age, specialization)
       puts "Person created succesfully!\n\n"
-      p @persons
     end
   end
   # rubocop:enable Metrics/MethodLength
